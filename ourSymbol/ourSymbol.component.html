@@ -1,0 +1,164 @@
+<div style="width:100%;height:100%;overflow:visible">
+  <div style="width:95%;height:5%;position:absolute;left:2.5%;top:2.5%">
+    {{ValueData.ChartTitle}}
+  </div>
+  <div style="width:100%;height:90%;position:absolute;left:0%;top:10%">
+    <div style="width:50%;height:50%;position:absolute;left:0%;top:0%">
+      <div style="width:20%;height:80%;position:absolute;left:0%;top:0%">
+        <svg style="width:100%;height:100%">
+          <text text-anchor="end" fill="black" dx="-5px" dy="15px" x="100%" y="0%">
+            {{HistogramData.MaxCount}}
+          </text>
+          <text text-anchor="end" fill="black" dx="-5px" dy="-3px" x="100%" y="100%">
+            0
+          </text>
+        </svg>
+      </div>
+      <div style="width:75%;height:80%;position:absolute;left:20%;top:0%">
+        <svg style="width:100%;height:100%">
+          <ng-container *ngFor="let point of BellCurveData.Points; let i = index">
+            <line *ngIf="i != BellCurveData.Points.length - 1" [attr.x1]="i + '%'" [attr.x2]="i + 1 + '%'"
+              [attr.y1]="100 - 100 * BellCurveData.Points[i] / BellCurveData.Max + '%'" [attr.y2]="100 - 100 * BellCurveData.Points[i + 1] / BellCurveData.Max + '%'"
+              stroke-width="1" stroke="black">
+            </line>
+          </ng-container>
+          <rect *ngFor="let point of HistogramData.Buckets; let i = index" [attr.x]="100 * i / HistogramData.Buckets.length + '%'"
+            [attr.width]="80 / HistogramData.Buckets.length + '%'" [attr.y]="100 - 100 * HistogramData.Buckets[i] / HistogramData.MaxCount + '%'"
+            [attr.height]="100 * HistogramData.Buckets[i] / HistogramData.MaxCount + '%'" stroke-width="1" stroke="black" fill="blue">
+          </rect>
+        </svg>
+      </div>
+      <div style="width:75%;height:20%;position:absolute;left:20%;top:80%">
+        <svg style="width:100%;height:100%">
+          <text text-anchor="start" fill="black" dy="15px" x="0%" y="0%">
+            {{HistogramData.Min | number}}
+          </text>
+          <text text-anchor="end" fill="black" dy="15px" x="100%" y="0%">
+            {{HistogramData.Max | number}}
+          </text>
+        </svg>
+      </div>
+    </div>
+    <div style="width:47.5%;height:50%;position:absolute;left:50%;top:0%">
+      <table style="width:100%">
+        <tr style="height:20px">
+          <td>
+            Chart Tag:
+          </td>
+          <td>
+            {{ValueData.Tag}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            Value:
+          </td>
+          <td>
+            {{ValueData.Value | number}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            Eng. Units:
+          </td>
+          <td>
+            {{ValueData.Units}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            Timestamp:
+          </td>
+          <td>
+            {{ValueData.Time}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            USL/LSL:
+          </td>
+          <td>
+            {{TrendData.HiHi}} / {{TrendData.LoLo}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            SD:
+          </td>
+          <td>
+            {{ValueData.SD | number}}
+          </td>
+        </tr>
+        <tr style="height:20px">
+          <td>
+            Process Potential:
+          </td>
+          <td>
+            {{ValueData.PP | number}}
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div style="width:100%;height:50%;position:absolute;left:0%;top:50%">
+      <div style="width:10%;height:90%;position:absolute;left:0%;top:0%;">
+        <svg style="width:100%;height:100%">
+          <text text-anchor="end" fill="black" dx="-5px" dy="5px" x="100%" [attr.y]="100 - 100 * (TrendData.HiHi - TrendData.YMin) / TrendData.YRange + '%'">
+            {{TrendData.HiHi}}
+          </text>
+          <text text-anchor="end" fill="black" dx="-5px" dy="5px" x="100%" [attr.y]="100 - 100 * (TrendData.Hi - TrendData.YMin) / TrendData.YRange + '%'">
+            {{TrendData.Hi}}
+          </text>
+          <text text-anchor="end" fill="black" dx="-5px" dy="5px" x="100%" [attr.y]="100 - 100 * (TrendData.Mid - TrendData.YMin) / TrendData.YRange + '%'">
+            {{TrendData.Mid}}
+          </text>
+          <text text-anchor="end" fill="black" dx="-5px" dy="5px" x="100%" [attr.y]="100 - 100 * (TrendData.Lo - TrendData.YMin) / TrendData.YRange + '%'">
+            {{TrendData.Lo}}
+          </text>
+          <text text-anchor="end" fill="black" dx="-5px" dy="5px" x="100%" [attr.y]="100 - 100 * (TrendData.LoLo - TrendData.YMin) / TrendData.YRange + '%'">
+            {{TrendData.LoLo}}
+          </text>
+        </svg>
+      </div>
+      <div style="width:87.5%;height:90%;position:absolute;left:10%;top:0%;border-left:1px solid black;border-right:1px solid black;">
+        <svg style="width:100%;height:100%">
+          <ng-container *ngFor="let point of TrendData.Points; let i = index">
+            <line *ngIf="i != TrendData.Points.length - 1" [attr.x1]="100 * TrendData.Points[i].x + '%'" [attr.x2]="100 * TrendData.Points[i + 1].x + '%'"
+              [attr.y1]="100 - 100 * (TrendData.Points[i].value - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.Points[i + 1].value - TrendData.YMin) / TrendData.YRange + '%'"
+              stroke-width="1" stroke="black">
+            </line>
+            <circle *ngIf="point.alarm != 0" [attr.cx]="100 * TrendData.Points[i].x + '%'" [attr.cy]="(100 - 100 * (TrendData.Points[i].value - TrendData.YMin) / TrendData.YRange > 100 ? 100 :
+                100 - 100 * (TrendData.Points[i].value - TrendData.YMin) / TrendData.YRange < 0 ? 0 :
+                100 - 100 * (TrendData.Points[i].value - TrendData.YMin) / TrendData.YRange) + '%'" r="2px" stroke-width="1"
+              [attr.stroke]="point.alarm_color" fill="none">
+            </circle>
+          </ng-container>
+          <line x1="0%" x2="100%" [attr.y1]="100 - 100 * (TrendData.HiHi - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.HiHi - TrendData.YMin) / TrendData.YRange + '%'"
+            stroke-width="1" stroke="red">
+          </line>
+          <line x1="0%" x2="100%" [attr.y1]="100 - 100 * (TrendData.Hi - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.Hi - TrendData.YMin) / TrendData.YRange + '%'"
+            stroke-width="1" stroke="orange">
+          </line>
+          <line x1="0%" x2="100%" [attr.y1]="100 - 100 * (TrendData.Mid - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.Mid - TrendData.YMin) / TrendData.YRange + '%'"
+            stroke-width="1" stroke="grey">
+          </line>
+          <line x1="0%" x2="100%" [attr.y1]="100 - 100 * (TrendData.Lo - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.Lo - TrendData.YMin) / TrendData.YRange + '%'"
+            stroke-width="1" stroke="orange">
+          </line>
+          <line x1="0%" x2="100%" [attr.y1]="100 - 100 * (TrendData.LoLo - TrendData.YMin) / TrendData.YRange + '%'" [attr.y2]="100 - 100 * (TrendData.LoLo - TrendData.YMin) / TrendData.YRange + '%'"
+            stroke-width="1" stroke="red">
+          </line>
+        </svg>
+      </div>
+      <div style="width:87.5%;height:10%;position:absolute;left:10%;top:90%">
+        <svg style="width:100%;height:100%">
+          <text text-anchor="start" fill="black" dy="15px" x="0%" y="0%">
+            {{TrendData.StartTime}}
+          </text>
+          <text text-anchor="end" fill="black" dy="15px" x="100%" y="0%">
+            {{TrendData.EndTime}}
+          </text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
